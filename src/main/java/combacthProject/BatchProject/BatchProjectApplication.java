@@ -1,5 +1,6 @@
 package combacthProject.BatchProject;
 
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -17,7 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BatchProjectApplication {
 	
 	@Autowired
-	private JobBuilderFactory job;
+	private JobBuilderFactory jobs;
 
 	@Autowired
 	private StepBuilderFactory steps;
@@ -34,13 +35,18 @@ public class BatchProjectApplication {
 
 	private Tasklet helloworldTasklet() {
 		return (new Tasklet() {
-			
 			@Override
 			public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
+				System.out.println("hello world");
+				return RepeatStatus.FINISHED;
 			}
 		});
+	}
+	
+	public Job helloworldJob() {
+		return jobs.get("helloworldJob")
+				.start(step1())
+				.build();
 	}
 
 }
