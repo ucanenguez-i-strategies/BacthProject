@@ -27,20 +27,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Creacion de memoria en base de datos REQUISITO PARA SPRING BATCH -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
 		
-		<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-oxm</artifactId>
-	</dependency>
 	<dependency>
-	    <groupId>org.hsqldb</groupId>
-	    <artifactId>hsqldb</artifactId>
+	   <groupId>org.springframework</groupId>
+	   <artifactId>spring-oxm</artifactId>
 	</dependency>
 			
 
@@ -54,6 +44,16 @@
 			<artifactId>spring-batch-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.batch</groupId>
+		    <artifactId>spring-batch-core</artifactId>
+		</dependency>
+		
+<dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
 
 	</dependencies>
 
