@@ -7,6 +7,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 
 import combacthProject.BatchProject.listener.HwJobExecutionListener;
 import combacthProject.BatchProject.listener.HwStepExecutioListener;
+import combacthProject.BatchProject.processor.inMemItemProcessor;
+import combacthProject.BatchProject.reader.InMemReader;
+import combacthProject.BatchProject.writer.ConsoleItemWriter;
 
 @EnableBatchProcessing
 @Configuration
@@ -30,11 +34,30 @@ public class BatchConfiguration {
 	@Autowired
 	private HwStepExecutioListener hwStepExecutionListener;
 	
+	@Autowired
+	private inMemItemProcessor MenItemProcessor;
+	
 	@Bean
 	public Step step1() {
 		return steps.get("step1")
 				.listener(hwStepExecutionListener)
 				.tasklet(helloworldTasklet())
+				.build();
+	}
+	
+	@Bean
+	public ItemReader reader() {
+		return new InMemReader();
+	}
+	
+	
+	@Bean
+	public Step step2() {
+		return steps.get("step2")
+				.<Integer,Integer>chunk(3)
+				.reader(reader())
+				.processor(MenItemProcessor)
+				.writer(new ConsoleItemWriter())
 				.build();
 	}
 
@@ -53,6 +76,7 @@ public class BatchConfiguration {
 		return jobs.get("helloworldJob")
 				.listener(hwJobExecutionListener)
 				.start(step1())
+				.next(step2())
 				.build();
 	}
 }

@@ -11,7 +11,7 @@ public class HwStepExecutioListener implements StepExecutionListener{
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		System.out.println( "este es antes del StepExcetuion" + stepExecution.getJobExecution().getExecutionContext());
-		
+		System.out.println("Dentro del paso " + stepExecution.getJobExecution().getJobParameters());
 	}
 
 	@Override
