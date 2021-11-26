@@ -5,6 +5,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -16,6 +17,7 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.LineTokenizer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -63,7 +65,7 @@ public class BatchConfiguration {
 	public Step step2() {
 		return steps.get("step2")
 				.<Integer,Integer>chunk(3)
-				.reader(flatFileItemReader())
+				.reader(flatFileItemReader(null))
 				.writer(new ConsoleItemWriter())
 				.build();
 	}
@@ -79,10 +81,13 @@ public class BatchConfiguration {
 	}
 	
 	@Bean
-	public FlatFileItemReader flatFileItemReader() {
+	@StepScope
+	public FlatFileItemReader flatFileItemReader(
+			@Value("#{ ['fileInput']}")
+			FileSystemResource inputFile) {
 		FlatFileItemReader reader = new FlatFileItemReader();
 		// step 1 permite leer y saber donde esta el archivo
-		reader.setResource(new FileSystemResource("input/product.csv"));
+		reader.setResource(inputFile);
 		
 		//Crea el liner mapper
 		reader.setLineMapper(
