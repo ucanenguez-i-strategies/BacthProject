@@ -12,6 +12,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @EnableBatchProcessing
 @SpringBootApplication
@@ -27,6 +28,7 @@ public class BatchProjectApplication {
 		SpringApplication.run(BatchProjectApplication.class, args);
 	}
 	
+	@Bean
 	public Step step1() {
 		return steps.get("step1")
 				.tasklet(helloworldTasklet())
@@ -43,6 +45,7 @@ public class BatchProjectApplication {
 		});
 	}
 	
+	@Bean
 	public Job helloworldJob() {
 		return jobs.get("helloworldJob")
 				.start(step1())
